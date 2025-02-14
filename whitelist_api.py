@@ -1,3 +1,31 @@
+
+import os
+import sqlite3
+
+DB_FILE = "whitelist.db"
+
+# Ensure database is correctly structured
+def initialize_database():
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+
+    # Recreate the whitelist table with correct column names
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS whitelist (
+            user_id TEXT PRIMARY KEY
+        )
+    """)
+    
+    # Add a test user to verify
+    cursor.execute("INSERT OR IGNORE INTO whitelist (user_id) VALUES ('12345678')")
+
+    conn.commit()
+    conn.close()
+    print("✅ Database initialized!")
+
+# Run database check on startup
+initialize_database()
+
 from flask import Flask, request, jsonify
 import sqlite3
 
